@@ -1,8 +1,14 @@
 import pygame as pg
+import socket
 
 SIZE = (1000, 1000)
 CLOCK = pg.time.Clock()
 FPS = 60
+
+SERVER_ADDRESS = socket.gethostname(), 6969
+clientsocket = socket.socket()
+clientsocket.connect(SERVER_ADDRESS)
+print("HOLA", clientsocket)
 
 pg.init()
 pg.display.set_caption("Pongpy")
