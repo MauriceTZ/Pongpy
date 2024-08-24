@@ -4,7 +4,7 @@ import threading
 import json
 import sys
 
-print(sys.version)
+
 SIZE_WINDOW = 900, 900
 SERVER_ADDRESS = "152.173.154.202", 1234
 PACKET_SIZE = 256
@@ -48,16 +48,17 @@ print("oponente conectado, partida iniciada")
 def thread_recieve_data():
     global oponent_rect, ball_pos, BALL_RADIUS, points, oponent_points
     while not end_thread:
-        try:
-            for packet in clientsocket.recv(PACKET_SIZE).decode().split("\n"):
+        for packet in (a:= clientsocket.recv(PACKET_SIZE).decode().split("\n")):
+            try:
                 data = json.loads(packet)
                 oponent_rect = pg.Rect(*data.get("rect", oponent_rect))
                 ball_pos = pg.Vector2(data.get("ball_pos", ball_pos))
                 BALL_RADIUS = float(data.get("ball_radius", BALL_RADIUS))
                 points = int(data.get("your_points", points))
                 oponent_points = int(data.get("oponent_points", oponent_points))
-        except json.JSONDecodeError:
-            pass
+            except json.JSONDecodeError:
+                print(a)
+                print("\n\n")
 
 
 threading.Thread(target=thread_recieve_data).start()
