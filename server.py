@@ -57,8 +57,9 @@ clientes[1].rect.right = WINDOW_RECT.right
 def thread_client_recieve(cliente: Cliente):
     while not end_thread:
         try:
-            data = json.loads(cliente.socket.recv(PACKET_SIZE))
-            cliente.rect.top = pg.Rect(data.get("rect", cliente.rect)).top
+            for packet in cliente.socket.recv(PACKET_SIZE).decode().split("\n"):
+                data = json.loads(packet)
+                cliente.rect.top = pg.Rect(data.get("rect", cliente.rect)).top
         except json.JSONDecodeError:
             pass
 
@@ -116,16 +117,16 @@ try:
 
         ball.position += ball.velocity * CLOCK.get_time() * 0.001
 
-        clientes[0].socket.send(json.dumps({"rect": tuple(clientes[1].rect),
+        clientes[0].socket.send((json.dumps({"rect": tuple(clientes[1].rect),
                                             "ball_pos": tuple(ball.position),
                                             "ball_radius": BALL_RADIUS,
                                             "your_points": clientes[0].points,
-                                            "oponent_points": clientes[1].points}).encode())
-        clientes[1].socket.send(json.dumps({"rect": tuple(clientes[0].rect),
+                                            "oponent_points": clientes[1].points}) + "\n").encode())
+        clientes[1].socket.send((json.dumps({"rect": tuple(clientes[0].rect),
                                             "ball_pos": tuple(ball.position),
                                             "ball_radius": BALL_RADIUS,
                                             "your_points": clientes[1].points,
-                                            "oponent_points": clientes[0].points}).encode())
+                                            "oponent_points": clientes[0].points}) + "\n").encode())
         CLOCK.tick(FPS)
 except Exception as e:
     print(e)

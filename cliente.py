@@ -49,12 +49,13 @@ def thread_recieve_data():
     global oponent_rect, ball_pos, BALL_RADIUS, points, oponent_points
     while not end_thread:
         try:
-            data = json.loads(clientsocket.recv(PACKET_SIZE))
-            oponent_rect = pg.Rect(*data.get("rect", oponent_rect))
-            ball_pos = pg.Vector2(data.get("ball_pos", ball_pos))
-            BALL_RADIUS = float(data.get("ball_radius", BALL_RADIUS))
-            points = int(data.get("your_points", points))
-            oponent_points = int(data.get("oponent_points", oponent_points))
+            for packet in clientsocket.recv(PACKET_SIZE).decode().split("\n"):
+                data = json.loads(packet)
+                oponent_rect = pg.Rect(*data.get("rect", oponent_rect))
+                ball_pos = pg.Vector2(data.get("ball_pos", ball_pos))
+                BALL_RADIUS = float(data.get("ball_radius", BALL_RADIUS))
+                points = int(data.get("your_points", points))
+                oponent_points = int(data.get("oponent_points", oponent_points))
         except json.JSONDecodeError:
             pass
 
@@ -88,7 +89,7 @@ try:
             p,
             ((rect.centerx + 50) * 0.7, 10),
         )
-        clientsocket.send(json.dumps({"rect": tuple(rect)}).encode())
+        clientsocket.send((json.dumps({"rect": tuple(rect)}) + "\n").encode())
         pg.display.update()
         CLOCK.tick(FPS)
 except Exception as e:
