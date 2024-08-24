@@ -4,9 +4,9 @@ import threading
 import json
 import sys
 
-
+print(sys.version)
 SIZE_WINDOW = 900, 900
-SERVER_ADDRESS = socket.gethostname(), 1234
+SERVER_ADDRESS = "152.173.154.202", 1234
 PACKET_SIZE = 256
 FPS = 60
 CLOCK = pg.time.Clock()

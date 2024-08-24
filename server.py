@@ -7,7 +7,7 @@ import random
 import math
 
 SIZE_WINDOW = 900, 900
-SERVER_ADDRESS = socket.gethostname(), 1234
+SERVER_ADDRESS = "", 1234
 PACKET_SIZE = 256
 FPS = 60
 CLOCK = pg.time.Clock()
@@ -49,7 +49,7 @@ ball = Ball()
 for i in range(2):
     socketclient, _ = serversocket.accept()
     clientes.append(Cliente(socketclient))
-    print(f"jugador {i} conectado")
+    print(f"jugador {i} conectado: {socketclient}")
 
 clientes[1].rect.right = WINDOW_RECT.right
 
