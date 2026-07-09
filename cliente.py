@@ -6,8 +6,7 @@ import sys
 
 
 SIZE_WINDOW = 900, 900
-SERVER_ADDRESS = "152.173.154.202", 1234
-PACKET_SIZE = 256
+SERVER_ADDRESS = tuple((int(x.strip()) if x.strip().isnumeric() else x.strip() for x in input("Dirección IP, puerto: ").split(",")))#"152.173.154.202", 1234PACKET_SIZE = 256
 FPS = 60
 CLOCK = pg.time.Clock()
 RECT_SIZE = 40, 200
